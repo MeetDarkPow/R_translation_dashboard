@@ -1,0 +1,500 @@
+---
+title: "Software Assurance Services | Analysis - XYZ Team"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: rows
+    vertical_layout: scroll
+    self_contained: false
+    favicon: favicon_32x32.png
+    includes:
+      in_header: "fragments/ganalytics.html"
+      after_body: "fragments/afterInit.html"
+    css: ["fragments/custom.css", "css/custom.css"]
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(rvest)
+library(stringr)
+library(dplyr)
+library(htmltools)
+library(echarts4r)
+library(reactable)
+source("global.R")
+```
+
+Sidebar {.sidebar data-width=200}
+=====================================
+
+```{r, echo=FALSE, results='asis'}
+htmltools::includeHTML('fragments/sidebar.html')
+```
+
+Home
+=====================================
+
+Row {data-height=50}
+-------------------------------------
+
+### Risk Analysis Between Dates
+
+Trend Between ***`r sdate`***  till ***`r edate`***.
+
+
+Row
+-------------------------------------
+
+### Total Risk Reduction
+
+```{r}
+valueBox(nrow(atest1)+nrow(test1), icon = "fa-sort-amount-asc", color = "white")
+```
+
+### VersionSet Risk Reduction
+
+```{r}
+valueBox(nrow(test1), icon = "fa-arrow-circle-down", color = "white")
+```
+
+### Apollo Risk Reduction
+
+```{r}
+valueBox(nrow(atest1), icon = "fa-arrow-circle-down", color = "white")
+```
+
+Row
+-------------------------------------
+
+### Total New Incoming Risks
+
+```{r}
+valueBox(nrow(atest2)+nrow(test2), icon = "fa-sort-amount-up", color = "white")
+```
+
+### VersionSet Incoming Risks
+
+```{r}
+valueBox(nrow(test2), icon = "fa-arrow-circle-up", color = "white")
+```
+
+### Apollo Incoming Risks
+
+```{r}
+valueBox(nrow(atest2), icon = "fa-arrow-circle-up", color = "white")
+```
+
+Row
+-------------------------------------
+
+### Net Reduction
+
+```{r}
+valueBox(total_rr, icon = "fa-angle-double-down", color = "white")
+```
+
+### Net VersionSet Reduction
+
+```{r}
+valueBox(vs_rr, icon = "fa-bars", color = "white")
+```
+
+### Net Apollo Reduction
+
+```{r}
+valueBox(ap_rr, icon = "fa-window-restore", color = "white")
+```
+
+
+Row {data-height=30}
+-------------------------------------
+
+### Snapshot as on **`r edate`**
+
+
+Row
+-------------------------------------
+
+### Effective VersionSet Risks
+
+```{r}
+valueBox(vs_riskc-clvs_count, icon = "fa-bars", color = "white")
+```
+
+### Total VersionSet Risks
+
+```{r}
+valueBox(vs_riskc, icon = "fa-bars", color = "white")
+```
+
+### Cloned VersionSet Risks
+
+```{r}
+valueBox(clvs_count, icon = "fa-clone", color = "white")
+```
+
+Row
+-------------------------------------
+
+### Pipeline Risks
+
+```{r}
+valueBox(pipeline_count, icon = "fa-sign-in", color = "white")
+```
+
+### Apollo Environment Risks
+
+```{r}
+valueBox(ap_riskc, icon = "fa-window-restore", color = "white")
+```
+
+<!-- ### Total Hosts -->
+
+<!-- ```{r} -->
+<!-- valueBox(host_count, icon = "fa-signal", color = "white") -->
+<!-- ``` -->
+
+### Blocked Software Resources
+
+```{r}
+valueBox(blkres_count, icon = "fa-ban", color = "white")
+```
+
+
+Row {data-height=450}
+-----------------------------------------------------------------------
+
+### Top Blocked Dependencies | <small> Consumed </small>
+
+```{r}
+br %>%
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    defaultSorted = "Count",
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      Blocked.Resources = colDef(
+        name = "Dependency",
+        width = 180,
+        defaultSortOrder = "desc",
+        filterable = TRUE,
+      ),
+      Count = colDef(
+        name = "Frequency",
+        defaultSortOrder = "desc",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(br$Count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#FF9900"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      )),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+### Top Campaigns | <small> Count </small>
+
+```{r}
+bc %>%
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    defaultSorted = "Count",
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      Associated.Campaigns = colDef(
+        name = "Campaign Name",
+        width = 180,
+        defaultSortOrder = "desc",
+        filterable = TRUE,
+      ),
+      Count = colDef(
+        name = "Frequency",
+        defaultSortOrder = "desc",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(bc$Count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#435f9c"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      )),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### Resolved Risks - VersionSet | <small> `r sdate` <small> 
+
+```{r}
+test1 %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      VersionSet = colDef(
+        name = "VersionSet Name",
+        width = 400,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      PipelineID = colDef(
+        name = "Pipeline ID",
+        filterable = TRUE,
+        width = 90 
+      ),
+      Risk_Name = colDef(
+        name = "Risk",
+        width = 500,
+        filterable = TRUE
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### New Risks - VersionSet | <small>  `r edate` <small> 
+
+```{r}
+test2 %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      VersionSet = colDef(
+        name = "VersionSet Name",
+        width = 400,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      PipelineID = colDef(
+        name = "Pipeline ID",
+        filterable = TRUE,
+        width = 90 
+      ),
+      Risk_Name = colDef(
+        name = "Risk",
+        width = 500,
+        filterable = TRUE
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### Resolved Risks - Apollo Environment | <small> `r sdate` <small> 
+
+```{r}
+atest1 %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      ApolloEnvName = colDef(
+        name = "Apollo Environment Name",
+        width = 500,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      Stage = colDef(
+        name = "Stage",
+        filterable = TRUE,
+        width = 90 
+      ),
+      PipelineID = colDef(
+        name = "Pipeline ID",
+        filterable = TRUE,
+        width = 90 
+      ),
+      Risk_Name = colDef(
+        name = "Risk",
+        width = 500,
+        filterable = TRUE
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### New Risks - Apollo Environment | <small> `r edate` <small> 
+
+```{r}
+atest2 %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      ApolloEnvName = colDef(
+        name = "Apollo Environment Name",
+        width = 500,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      Stage = colDef(
+        name = "Stage",
+        filterable = TRUE,
+        width = 90 
+      ),
+      PipelineID = colDef(
+        name = "Pipeline ID",
+        filterable = TRUE,
+        width = 90 
+      ),
+      Risk_Name = colDef(
+        name = "Risk",
+        width = 500,
+        filterable = TRUE
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### Net Version Set Risks | <small> Summary <small> 
+
+```{r}
+net_vs %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      VersionSet = colDef(
+        name = "Version Set",
+        width = 500,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      sdate = colDef(
+        width = 110 
+      ),
+      edate = colDef(
+        width = 110 
+      ),
+      Diiference = colDef(
+        name = "Risk Difference",
+        width = 200
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+
+Row {data-height=400}
+-----------------------------------------------------------------------
+
+### Net Apollo Environment Risks | <small> Summary <small> 
+
+```{r}
+net_apollo %>% 
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    style = list(fontFamily = 'inherit',
+                 fontSize = '14px'),
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      ApolloEnvName = colDef(
+        name = "Apollo Environment Name",
+        width = 500,
+        defaultSortOrder = "desc",
+        filterable = TRUE
+      ),
+      Stage = colDef(
+        name = "Stage",
+        filterable = TRUE,
+        width = 90 
+      ),
+      sdate = colDef(
+        width = 110 
+      ),
+      edate = colDef(
+        width = 110 
+      ),
+      Diiference = colDef(
+        name = "Risk Difference",
+        width = 200
+      )
+    ),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+
+
+```{js}
+```
