@@ -89,71 +89,19 @@
   box-shadow: 1px 1px 1px rgba(0,0,0,.32),0 2px 2px rgba(0,0,0,.15);
 }
 
-#total-risk-reduction .inner {
+#total-languages .inner {
   color: #FF9900;
 }
 
-#versionset-risk-reduction .inner {
+#translated-messages .inner {
   color: #FF9900;
 }
 
-#apollo-risk-reduction .inner {
+#untranslated-messages .inner {
   color: #FF9900;
 }
 
-#total-new-incoming-risks .inner {
-  color: #FF9900;
-}
-
-#versionset-incoming-risks .inner {
-  color: #FF9900;
-}
-
-#apollo-incoming-risks .inner {
-  color: #FF9900;
-}
-
-#net-reduction .inner {
-  color: #FF9900;
-}
-
-#net-versionset-reduction .inner {
-  color: #FF9900;
-}
-
-#net-apollo-reduction .inner {
-  color: #FF9900;
-}
-
-#effective-versionset-risks .inner {
-  color: #FF9900;
-}
-
-#total-versionset-risks .inner {
-  color: #FF9900;
-}
-
-#cloned-versionset-risks .inner {
-  color: #FF9900;
-}
-
-#pipeline-risks .inner {
-  color: #FF9900;
-}
-
-#blocked-software-resources .inner {
-  color: #FF9900;
-}
-
-#versionset-risks .inner {
-  color: #FF9900;
-}
-
-#apollo-environment-risks .inner {
-  color: #FF9900;
-}
-
-#total-hosts .inner {
+#fuzzy-messages .inner {
   color: #FF9900;
 }
 
