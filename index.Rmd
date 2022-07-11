@@ -5,7 +5,7 @@ output:
     orientation: rows
     vertical_layout: scroll
     self_contained: false
-    favicon: favicon_32x32.png
+    favicon:
     includes:
       in_header: "fragments/ganalytics.html"
       after_body: "fragments/afterInit.html"
@@ -33,127 +33,32 @@ htmltools::includeHTML('fragments/sidebar.html')
 Home
 =====================================
 
-Row {data-height=50}
--------------------------------------
-
-
 
 Row
 -------------------------------------
 
-### Total Packages Translated
+### Total Languages
 
 ```{r}
-
+valueBox(total_lang, icon = "fa-language", color = "white")
 ```
 
-### 
+### Translated Messages
 
 ```{r}
-
+valueBox(total_trans_msg, icon = "fa-message-check", color = "white")
 ```
 
-### 
+### Untranslated Messages
 
 ```{r}
-
+valueBox(total_untrans_msg, icon = "fa-message-xmark", color = "white")
 ```
 
-Row
--------------------------------------
-
-### 
+### Fuzzy Messages
 
 ```{r}
-
-```
-
-### 
-
-```{r}
-
-```
-
-### 
-
-```{r}
-
-```
-
-Row
--------------------------------------
-
-### 
-
-```{r}
-
-```
-
-### 
-
-```{r}
-
-```
-
-### 
-
-```{r}
-")
-```
-
-
-Row {data-height=30}
--------------------------------------
-
-### 
-
-
-Row
--------------------------------------
-
-### 
-
-```{r}
-
-```
-
-###
-
-```{r}
-
-```
-
-### 
-
-```{r}
-
-```
-
-Row
--------------------------------------
-
-### 
-
-```{r}
-
-```
-
-### 
-
-```{r}
-
-```
-
-<!-- ### Total Hosts -->
-
-<!-- ```{r} -->
-<!-- valueBox(host_count, icon = "fa-signal", color = "white") -->
-<!-- ``` -->
-
-### 
-
-```{r}
-
+valueBox(total_fuzzy_msg, icon = "fa-message-exclamation", color = "white")
 ```
 
 
