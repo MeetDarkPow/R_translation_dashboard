@@ -8,7 +8,7 @@
 
 
 .section.sidebar {
-  background: #FF9900;
+  background: #00438d;
   padding-left: 0px;
   padding-right: 0px;
   margin-right: 2em;
@@ -53,21 +53,21 @@
 .value-box {
   border-radius: .25em;
   box-shadow: 4px 4px 4px rgba(0,0,0,.05);
-  height: 150px;
+  height: 140px;
   margin-bottom: 0.75em;
   margin-left: 0.65em;
   border: 1px solid #53a4ff;
 }
 
 .value-box .icon i.fa {
-  font-size: 55px;
+  font-size: 60px;
   top: 20px;
   transition: all .3s linear;
-  color: #435f9c;
+  color: #FFFFFF;
 }
 
 .value-box:hover .icon > i {
-	font-size: 65px;
+	font-size: 75px;
 	position: absolute;
 	right: 15px;
 	top: 15px;
@@ -90,21 +90,20 @@
 }
 
 #total-languages .inner {
-  color: #FF9900;
-}
+color: #FF9900;
+  }
 
 #translated-messages .inner {
-  color: #FF9900;
-}
+color: #FF9900;
+  }
 
 #untranslated-messages .inner {
-  color: #FF9900;
-}
+color: #FF9900;
+  }
 
 #fuzzy-messages .inner {
-  color: #FF9900;
-}
-
+color: #FF9900;
+  }
 
 .navlink:hover {
   text-decoration: none;
@@ -168,7 +167,6 @@
 	min-width: 70px;
 }
 
-
 .bar-cell {
   display: flex;
   align-items: center;
@@ -188,5 +186,4 @@
 
 .bar {
   height: 100%;
-  width: 100%;
 }
