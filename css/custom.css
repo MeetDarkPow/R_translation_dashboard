@@ -90,19 +90,19 @@
 }
 
 #total-languages .inner {
-color: #FF9900;
+color: #2780e3;
   }
 
 #translated-messages .inner {
-color: #FF9900;
+color: #2780e3;
   }
 
 #untranslated-messages .inner {
-color: #FF9900;
+color: #2780e3;
   }
 
 #fuzzy-messages .inner {
-color: #FF9900;
+color: #2780e3;
   }
 
 .navlink:hover {
