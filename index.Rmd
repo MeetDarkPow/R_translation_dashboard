@@ -46,19 +46,19 @@ valueBox(total_lang, icon = "fa-language", color = "white")
 ### Translated Messages
 
 ```{r}
-valueBox(total_trans_msg, icon = "fa-message-check", color = "white")
+valueBox(total_trans_msg, icon = "fa-comment", color = "white")
 ```
 
 ### Untranslated Messages
 
 ```{r}
-valueBox(total_untrans_msg, icon = "fa-message-xmark", color = "white")
+valueBox(total_untrans_msg, icon = "fa-comment-slash", color = "white")
 ```
 
 ### Fuzzy Messages
 
 ```{r}
-valueBox(total_fuzzy_msg, icon = "fa-message-exclamation", color = "white")
+valueBox(total_fuzzy_msg, icon = "fa-puzzle-piece", color = "white")
 ```
 
 
