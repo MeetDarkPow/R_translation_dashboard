@@ -14,12 +14,10 @@ output:
 
 ```{r setup, include=FALSE}
 library(flexdashboard)
-library(rvest)
-library(stringr)
-library(dplyr)
+library(crosstalk)
+library(tidyverse)
 library(htmltools)
-library(echarts4r)
-library(reactable)
+library(plotly)
 source("global_translations.R")
 ```
 
@@ -65,12 +63,28 @@ valueBox(total_fuzzy_msg, icon = "fa-puzzle-piece", color = "white")
 Row {data-height=450}
 -----------------------------------------------------------------------
 
-###  
+```{r data}
+df <- SharedData$new(final_df)
+```
 
-```{r}
+```{r filters}
+
+# Filter Select Input - Language
+filter_select(id = "language", 
+              label = "Select Translation Language",
+              sharedData = df, 
+              group = ~language)
 
 ```
 
+### Graph of Translated vs Untranslated Messages || <small> Per Language </small>
+
+```{r}
+fig <- plot_ly(df, x = ~package, y = ~translated_count, type = 'bar', name = 'Translated Messages')
+fig <- fig %>% add_trace(y = ~untranslated_count, name = 'Untranslated Messages')
+fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'group')
+fig
+```
 
 
 ```{js}
