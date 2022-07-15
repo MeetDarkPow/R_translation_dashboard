@@ -18,6 +18,7 @@ library(crosstalk)
 library(tidyverse)
 library(htmltools)
 library(plotly)
+library(reactable)
 source("global_translations.R")
 ```
 
@@ -60,7 +61,7 @@ valueBox(total_fuzzy_msg, icon = "fa-puzzle-piece", color = "white")
 ```
 
 
-Row {data-height=450}
+Row {data-height=70}
 -----------------------------------------------------------------------
 
 ```{r data}
@@ -77,13 +78,72 @@ filter_select(id = "language",
 
 ```
 
+Row {data-height=450}
+-----------------------------------------------------------------------
+
 ### Graph of Translated vs Untranslated Messages || <small> Per Language </small>
 
 ```{r}
 fig <- plot_ly(df, x = ~package, y = ~translated_count, type = 'bar', name = 'Translated Messages')
 fig <- fig %>% add_trace(y = ~untranslated_count, name = 'Untranslated Messages')
-fig <- fig %>% layout(yaxis = list(title = 'Count'), barmode = 'group')
+fig <- fig %>% layout(yaxis = list(title = 'Messages Count'), barmode = 'group')
 fig
+```
+
+Row {data-height=450}
+-----------------------------------------------------------------------
+
+### Package Translation Completed | <small> Respective Languages </small>
+
+```{r}
+complete_trans_df %>%
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    defaultSorted = "translated_count",
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      package = colDef(
+        name = "Package Name",
+        width = 150,
+        defaultSortOrder = "desc",
+        filterable = TRUE,
+      ),
+      language = colDef(
+        name = "Language",
+        width = 150,
+        filterable = TRUE,
+      ),
+      untranslated_count = colDef(
+        show = FALSE
+      ),
+      translated_count = colDef(
+        name = "Translated Message Count",
+        defaultSortOrder = "desc",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(complete_trans_df$translated_count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#fc5185"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      )),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
+
+### Package Translation Not Started | <small> Respective Languages </small>
+
+```{r}
+
 ```
 
 
