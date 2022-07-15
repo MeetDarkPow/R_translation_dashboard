@@ -86,7 +86,7 @@ Row {data-height=450}
 ```{r}
 fig <- plot_ly(df, x = ~package, y = ~translated_count, type = 'bar', name = 'Translated Messages')
 fig <- fig %>% add_trace(y = ~untranslated_count, name = 'Untranslated Messages')
-fig <- fig %>% layout(yaxis = list(title = 'Message Count'), barmode = 'group')
+fig <- fig %>% layout(yaxis = list(title = 'Message Count'), xaxis = list(title = "Packages"), barmode = 'group')
 fig
 ```
 
