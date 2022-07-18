@@ -11,7 +11,7 @@ total_trans_msg <- length(msg_status_df$translated[msg_status_df$translated==TRU
 total_untrans_msg <- length(msg_status_df$translated[msg_status_df$translated==FALSE])
 total_fuzzy_msg <- length(msg_status_df$fuzzy[msg_status_df$fuzzy==TRUE])
 
-# # Final message status counts - Translated, Untranslated, Fuzzy Message Count
+# Final message status counts - Translated, Untranslated, Fuzzy Message Count
 # Languages dependent graphs for translated/untranslated messages
 lang_df <- msg_status_df %>%
   select(package, language, translated, fuzzy)

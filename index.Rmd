@@ -176,7 +176,7 @@ complete_untrans_df %>%
           bar <- div(
             class = "bar-chart",
             style = list(marginRight = "6px"),
-            div(class = "bar", style = list(width = width, backgroundColor = "#fc5185"))
+            div(class = "bar", style = list(width = width, backgroundColor = "#3fc1c9"))
           )
           div(class = "bar-cell", span(class = "number", value), bar)
         }
@@ -187,6 +187,78 @@ complete_untrans_df %>%
   )
 ```
 
+Row {data-height=450}
+-----------------------------------------------------------------------
+
+### Translations Message Status | <small> Data Table </small>
+
+```{r}
+final_df %>%
+  reactable(
+    .,
+    pagination = TRUE,
+    showPageSizeOptions = TRUE,
+    highlight = TRUE,
+    defaultColDef = colDef(headerClass = "header", align = "left"),
+    columns = list(
+      package = colDef(
+        name = "Package Name",
+        width = 150,
+        defaultSortOrder = "desc",
+        filterable = TRUE,
+      ),
+      language = colDef(
+        name = "Language",
+        width = 150,
+        filterable = TRUE,
+      ),
+      translated_count = colDef(
+        name = "Translated Message Count",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(final_df$translated_count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#fc5185"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      ),
+      untranslated_count = colDef(
+        name = "Untranslated Message Count",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(final_df$untranslated_count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#3fc1c9"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      ),
+      fuzzy_count = colDef(
+        name = "Fuzzy Message Count",
+        cell = function(value) {
+          width <- paste0(value * 100 / max(final_df$fuzzy_count), "%")
+          value <- format(value, big.mark = ",")
+          value <- format(value, width = 9, justify = "right")
+          bar <- div(
+            class = "bar-chart",
+            style = list(marginRight = "6px"),
+            div(class = "bar", style = list(width = width, backgroundColor = "#241327"))
+          )
+          div(class = "bar-cell", span(class = "number", value), bar)
+        }
+      )),
+    compact = TRUE,
+    bordered = TRUE,
+    class = "categories-tbl"
+  )
+```
 
 ```{js}
 ```
